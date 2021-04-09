@@ -1,24 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { LinkContainer } from "react-router-bootstrap";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+
+import "./App.css";
+import Browser from "./components/Browser";
+import Error from "./components/Error";
+import { links } from "./data/links";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Navbar bg="primary" varient="dark">
+          <LinkContainer to="/">
+            <Navbar.Brand>F Media Player</Navbar.Brand>
+          </LinkContainer>
+          <Nav className="mr-auto">
+            {links.map((link) => {
+              const { id, url, text } = link;
+              return (
+                <LinkContainer key={id} to={url}>
+                  <Nav.Link>{text}</Nav.Link>
+                </LinkContainer>
+              );
+            })}
+          </Nav>
+        </Navbar>
+
+        <Switch>
+          <Route path="/browser/:path*" children={<Browser />}></Route>
+          <Route path="/player/:path*" children={<Browser />}></Route>
+          <Route path="*">
+            <Error />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
