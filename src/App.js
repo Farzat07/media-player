@@ -13,7 +13,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Navbar bg="primary" varient="dark">
+        <Navbar bg="primary" variant="dark">
           <LinkContainer to="/">
             <Navbar.Brand>F Media Player</Navbar.Brand>
           </LinkContainer>
