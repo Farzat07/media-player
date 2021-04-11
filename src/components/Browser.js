@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 
 import { browser } from "../util/axios";
+import { handleAxiosError } from "../util/handleError";
 import BrowserItem from "./BrowserItem";
 
 function Browser() {
@@ -33,31 +34,7 @@ function Browser() {
       })
       .catch((error) => {
         setEntries([]);
-        if (error.response) {
-          console.error(error.response);
-          const doc = document.implementation.createHTMLDocument("");
-          // We can do this because we know the source is safe.
-          // Otherwise shouldn't be used.
-          doc.documentElement.innerHTML = error.response.data;
-          error.response.data = doc.querySelector("p").textContent;
-          setError(error.response);
-        } else if (error.request) {
-          console.error(error.request);
-          setError({
-            status: "5XX",
-            statusText: "UNKOWN SERVER ERROR",
-            data:
-              "It seems that an error has occured on the server and no response was received.",
-          });
-        } else {
-          console.error(error.message);
-          setError({
-            status: "4XX",
-            statusText: "UNKOWN CLIENT ERROR",
-            data:
-              "Seems that something happened in setting up the request that triggered an error.",
-          });
-        }
+        setError(handleAxiosError(error));
       });
 
     return () => {
