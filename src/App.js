@@ -6,7 +6,7 @@ import Nav from "react-bootstrap/Nav";
 
 import "./App.css";
 import Browser from "./components/Browser";
-import Error from "./components/Error";
+import PageNotFound from "./components/PageNotFound";
 import { links } from "./data/links";
 
 function App() {
@@ -33,7 +33,7 @@ function App() {
           <Route path="/browser/:path*" children={<Browser />}></Route>
           <Route path="/player/:path*" children={<Browser />}></Route>
           <Route path="*">
-            <Error />
+            <PageNotFound />
           </Route>
         </Switch>
       </div>
