@@ -8,16 +8,18 @@ import Alert from "react-bootstrap/Alert";
 import { browser } from "../util/axios";
 import { handleAxiosError } from "../util/handleError";
 import BrowserItem from "./BrowserItem";
+import CopyAlert from "./CopyAlert";
 
 function Browser() {
-  const { path } = useParams();
+  const { path = "" } = useParams();
   const history = useHistory();
   const [entries, setEntries] = useState([]);
   const [error, setError] = useState(undefined);
+  const [copyText, setCopyText] = useState("");
 
   useEffect(() => {
     browser
-      .get(path || "")
+      .get(path)
       .then((response) => {
         console.log(response.data);
         if (response.headers["content-type"] === "application/json") {
@@ -38,11 +40,11 @@ function Browser() {
       });
 
     return () => {
-      // cleanup
+      setCopyText("");
     };
   }, [path]);
 
-  const pathSubtrings = (path || "").split("/");
+  const pathSubtrings = path.split("/");
   pathSubtrings.pop();
   const parentPath = pathSubtrings.join("/");
 
@@ -52,8 +54,12 @@ function Browser() {
         <Link className="btn btn-outline-primary" to={`/browser/${parentPath}`}>
           Move up directory
         </Link>
-        <Button variant="outline-light">Copy path to directory</Button>
+        <Button onClick={() => setCopyText(`/${path}`)} variant="outline-light">
+          Copy path to directory
+        </Button>
       </ButtonGroup>
+
+      <CopyAlert copyText={copyText} onClose={() => setCopyText("")} />
 
       {error && (
         <Alert variant="danger">
